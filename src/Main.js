@@ -9,8 +9,34 @@ class Main extends Component {
   
     this.state = {
       isAuthenticated: false,
-      isAuthenticating: true
+      isAuthenticating: true,
+      user_id: "",
     };
+  }
+
+  async componentDidMount() {
+    try {
+      if (this.state.user_id !== "") {
+        this.userHasAuthenticated(true);
+      }
+    }
+    catch(e) {
+      if (e !== 'No current user') {
+        alert(e);
+      }
+    }
+
+    this.setState({ isAuthenticating: false });   
+  }
+  
+  userHasAuthenticated = authenticated => {
+    this.setState({ isAuthenticated: authenticated });
+  }
+ 
+  handleLogout = async event => {
+    this.setState({ isAuthenticated: false }, { isAuthenticating: true }, {user_id: ""});
+    this.userHasAuthenticated(false);
+    this.props.history.push("/login");
   }
   
   render() {

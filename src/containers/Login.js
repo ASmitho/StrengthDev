@@ -9,12 +9,42 @@ export default class Login extends Component {
 
     this.state = {
       user_id: "",
-      password: ""
+      fullname: "",
+      age: 0,
+      height_in: 0,
+      weight_lb: 0,
+      createdAt: 0,
+      updated: 0,
     };
   }
 
+  handleChange = event => {
+    this.setState({
+      [event.target.id]: event.target.value
+    });
+  }
+
   validateForm() {
-    return this.state.user_id.length > 0 && this.state.password.length > 0;
+    return this.state.user_id.length > 0;
+  }
+
+  handleSubmit = async event => {
+    event.preventDefault();
+  
+    this.setState({ isLoading: true }); 
+    var self = this;
+    
+    fetch('https://tlgorw9gn4.execute-api.us-east-2.amazonaws.com/dev/get/' + this.state.user_id, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }})
+      .then(response => response.json())
+      .then(json => {
+      alert(json.user_id);
+      console.log('parsed json', json) // access json.body here
+      })
   }
 
   render() {
@@ -28,14 +58,6 @@ export default class Login extends Component {
               type="user_id"
               value={this.state.user_id}
               onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup controlId="password" bsSize="large">
-            <ControlLabel>Password</ControlLabel>
-            <FormControl
-              value={this.state.password}
-              onChange={this.handleChange}
-              type="password"
             />
           </FormGroup>
           <LoaderButton

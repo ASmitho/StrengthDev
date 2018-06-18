@@ -62,6 +62,7 @@ export default class Signup extends Component {
           function(response) {
             if (response.status === 200) {
               //aert("User: " + this.state.user_id + "was successfully created!");
+              self.props.userHasAuthenticated(true);
               self.props.history.push("/welcome");
               self.setState({ isLoading: false });
               self.state.newUser = true; 
@@ -139,7 +140,8 @@ export default class Signup extends Component {
         <h1> Ready to get started? </h1>
         {this.state.newUser === null
           ? this.renderForm()
-          : this.renderConfirmationForm()}
+          : this.props.history.push("/welcome")};
+        }
       </div>
     );
   }
